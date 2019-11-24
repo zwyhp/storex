@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lianxi.mapper.ProductsMapper">
+    <select id="queryProductByName" parameterType="string" resultType="com.lianxi.entity.Product">
+        select * from products where  name = #{name}
+    </select>
+
+    <select id="queryProductById" parameterType="String" resultType="com.lianxi.entity.Product">
+        select * from products where  id = #{id}
+    </select>
+
+    <delete id="deleteProductById" parameterType="int" >
+        delete  from products where id = #{id}
+    </delete>
+
+    <insert id="addProduct" parameterType="com.lianxi.entity.Product" >
+        insert  into products values(#{id},#{name},#{price},#{category},#{pnum},#{imgurl},#{description})
+    </insert>
+
+    <update id="updateProductById" parameterType="com.lianxi.entity.Product">
+        update products set name = #{name},price = #{price},category = #{category},pnum = #{pnum},imgurl = #{imgurl},description = #{description} where id = #{id}
+    </update>
+
+    <select id="queryProductByPage" parameterType="Map" resultType="com.lianxi.entity.Product">
+        select * from products
+        <if test="categoty != null  and  categoty!='' ">
+           where  categoty = #{categoty}
+        </if>
+        <if test="offset != null and pageSize != null">
+            limit  #{offset},#{pageSize}
+        </if>
+    </select>
+	<select id="queryAllProduct"  parameterType="string" resultType="com.lianxi.entity.Product">
+        select * from products
+        <if test="categoty != null and categoty != '' ">
+        	where categoty = #{categoty}
+        </if>
+    </select>
+    <update id="updateImgById"  parameterType="Map" >
+        update products set imgurl = #{imgurl} where id = #{id}
+    </update>
+</mapper>

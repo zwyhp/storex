@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	<!-- 扫描controller -->
+	<context:component-scan base-package="com.lianxi.controller"></context:component-scan>
+	
+	
+	<!-- 配置映射器和适配器 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+
+	<!-- 配置前视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 注入前后缀 -->
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- 配置springmvc对文件上传的支持 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置文件名的编码 -->
+		<property name="defaultEncoding" value="utf-8"></property>
+		
+		
+	</bean>
+
+
+	<!-- 配置静态文件放行 -->
+	<mvc:default-servlet-handler />
+	
+	<mvc:interceptors>
+            <mvc:interceptor>
+                <mvc:mapping path="/**"/>
+                <mvc:exclude-mapping path="/login.action"/>
+                <mvc:exclude-mapping path="/admin/login.action"/>
+                <mvc:exclude-mapping path="/register.action"/>
+                <mvc:exclude-mapping path="/admin/register.action"/>
+                <bean class="com.lianxi.Interceptor.LoginInterceptor"> </bean>
+            </mvc:interceptor>
+        </mvc:interceptors>
+
+	<!-- 开启定时任务 -->
+	<task:annotation-driven/>
+</beans>
